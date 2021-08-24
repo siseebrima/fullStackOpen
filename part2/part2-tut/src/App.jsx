@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Note from "./components/Note";
+import axios from "axios";
 
 const App = (props) => {
   // const { notes } = props;
-  const [notes, setNotes] = useState(props.notes);
+  const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("");
   const [showAll, setShowAll] = useState(true);
+
+  useEffect(() => {
+    axios.get("http://10.1.1.183:3001/notes").then((response) => {
+      const data = response.data;
+      setNotes(data);
+    });
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
