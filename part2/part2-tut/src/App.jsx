@@ -25,8 +25,11 @@ const App = (props) => {
       important: Math.random() < 0.5,
       id: notes.length + 1,
     };
-    setNotes(notes.concat(noteObject));
-    setNewNote("");
+
+    axios.post("http://10.1.1.183:3001/notes", noteObject).then((response) => {
+      setNotes(notes.concat(noteObject));
+      setNewNote("");
+    });
   };
 
   const handleInput = (e) => setNewNote(e.target.value);
