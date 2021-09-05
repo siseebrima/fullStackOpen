@@ -10,7 +10,7 @@
       "id": 2,
       "content": "Browser can execute only JavaScript",
       "date": "2019-05-30T18:39:34.091Z",
-      "important": false
+      "important": true
     },
     {
       "id": 3,
@@ -27,7 +27,7 @@
     {
       "content": "test",
       "date": "2021-09-02T14:16:32.879Z",
-      "important": false,
+      "important": true,
       "id": 5
     },
     {
@@ -39,7 +39,7 @@
     {
       "content": "wow",
       "date": "2021-09-02T14:16:57.582Z",
-      "important": true,
+      "important": false,
       "id": 7
     },
     {
@@ -51,7 +51,7 @@
     {
       "content": "test2",
       "date": "2021-09-02T14:19:42.755Z",
-      "important": true,
+      "important": false,
       "id": 9
     },
     {
@@ -59,6 +59,18 @@
       "date": "2021-09-02T14:19:57.707Z",
       "important": false,
       "id": 10
+    },
+    {
+      "content": "This is from the phone",
+      "date": "2021-09-03T13:47:19.638Z",
+      "important": false,
+      "id": 11
+    },
+    {
+      "content": "test lamin",
+      "date": "2021-09-03T15:09:19.516Z",
+      "important": false,
+      "id": 12
     }
   ]
 }

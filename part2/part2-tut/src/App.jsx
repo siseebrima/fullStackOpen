@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Note from "./components/Note";
-import axios from "axios";
+// import axios from "axios";
+import noteService from "./services/notes";
 
 const App = (props) => {
   // const { notes } = props;
@@ -9,9 +10,8 @@ const App = (props) => {
   const [showAll, setShowAll] = useState(true);
 
   useEffect(() => {
-    axios.get("http://10.1.1.183:3001/notes").then((response) => {
-      const data = response.data;
-      setNotes(data);
+    noteService.getAll().then((response) => {
+      setNotes(response);
     });
   }, []);
 
@@ -26,8 +26,8 @@ const App = (props) => {
       id: notes.length + 1,
     };
 
-    axios.post("http://10.1.1.183:3001/notes", noteObject).then((response) => {
-      setNotes(notes.concat(noteObject));
+    noteService.create(noteObject).then((response) => {
+      setNotes(notes.concat(response));
       setNewNote("");
     });
   };
@@ -41,6 +41,32 @@ const App = (props) => {
 
   const handleToggle = () => setShowAll(!showAll);
 
+  const toggleImportance = (id) => {
+    // console.log("the importance of", id, "has been toggled");
+    // const url = `http://10.1.1.183:3001/notes/${id}`;
+    // console.log(url);
+    const note = notes.find((n) => n.id === id);
+    // console.log(note);
+    const changedNote = { ...note, important: !note.important };
+    // console.log(changedNote);
+
+    noteService
+      .update(id, changedNote)
+      .then((response) => {
+        setNotes(notes.map((note) => (note.id !== id ? note : response)));
+      })
+      .catch((error) => {
+        alert(`the note '${note.content}' was already deleted from the server`);
+        console.log(error.message);
+        setNotes(notes.filter((n) => n.id !== id));
+      });
+
+    // axios.put(url, changedNote).then((response) => {
+    //   // console.log(response);
+    //   setNotes(notes.map((n) => (n.id !== id ? note : response.data)));
+    // });
+  };
+
   return (
     <div>
       <h1>Notes</h1>
@@ -51,7 +77,13 @@ const App = (props) => {
       </div>
       <ul>
         {notesToShow.map((note) => {
-          return <Note key={note.id} note={note} />;
+          return (
+            <Note
+              key={note.id}
+              note={note}
+              toggleImportance={() => toggleImportance(note.id)}
+            />
+          );
         })}
       </ul>
       <form onSubmit={handleSubmit}>
