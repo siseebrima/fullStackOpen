@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import Contacts from "./components/Contacts";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
-import axios from "axios";
+// import axios from "axios";
+// import serices from "./services/personService";
+import services from "./services/personService";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -12,9 +14,9 @@ const App = () => {
   const [filtered, setFiltered] = useState([]);
 
   useEffect(() => {
-    axios.get("http://10.1.1.183:3001/persons").then((response) => {
+    services.getAll().then((response) => {
       // console.log(response.data)
-      const data = response.data;
+      const data = response;
       setPersons(data);
     });
   }, []);
@@ -25,14 +27,21 @@ const App = () => {
     const names = persons.filter((p) => p.name === newName);
     names.length > 0
       ? alert(`${newName} is already added to phonebook`)
-      : setPersons(persons.concat({ name: newName, number: newNumber }));
+      : services
+          .create({
+            name: newName,
+            number: newNumber,
+          })
+          .then((response) => {
+            setPersons(persons.concat(response));
+          });
     setNewName("");
     setNewNumber("");
   };
 
   const handleName = (e) => {
     const name = e.target.value;
-    setNewName(name.trim());
+    setNewName(name);
   };
   const handleNumber = (e) => {
     const number = e.target.value;
@@ -50,6 +59,16 @@ const App = () => {
     setFiltered(toShow);
   };
 
+  const handleDelete = (id) => {
+    // console.log(`the id of this person is ${id} `);
+    const person = persons.find((p) => p.id === id);
+    console.log(person);
+    alert(`do you want to delete ${person.name}?`);
+    services.remove(id, person).then((response) => {
+      setPersons(persons.filter((p) => p.id !== id));
+    });
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -63,7 +82,11 @@ const App = () => {
         newNumber={newNumber}
       />
       {/* <div>debug: {newName}</div> */}
-      <Contacts filtered={filtered} persons={persons} />
+      <Contacts
+        filtered={filtered}
+        persons={persons}
+        handleDelete={handleDelete}
+      />
     </div>
   );
 };

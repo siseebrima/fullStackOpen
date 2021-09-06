@@ -1,6 +1,6 @@
 import React from "react";
 
-const Contacts = ({ filtered, persons }) => {
+const Contacts = ({ filtered, persons, handleDelete }) => {
   return (
     <div>
       <h2>Numbers</h2>
@@ -9,6 +9,7 @@ const Contacts = ({ filtered, persons }) => {
             return (
               <p key={p.name}>
                 {p.name} {p.number}
+                <button onClick={() => handleDelete(p.id)}>delete</button>
               </p>
             );
           })
@@ -16,6 +17,7 @@ const Contacts = ({ filtered, persons }) => {
             return (
               <p key={p.name}>
                 {p.name} {p.number}
+                <button onClick={() => handleDelete(p.id)}>delete</button>
               </p>
             );
           })}
